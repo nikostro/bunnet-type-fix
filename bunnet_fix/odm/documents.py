@@ -13,7 +13,7 @@ from typing import (
     Union,
 )
 from uuid import UUID, uuid4
-
+from typing_extensions import Self
 from bson import DBRef, ObjectId
 from lazy_model import LazyModel
 from pydantic import (
@@ -302,12 +302,12 @@ class Document(
     @save_state_after
     @validate_self_before
     def insert(
-        self: DocType,
+        self: Self,
         *,
         link_rule: WriteRules = WriteRules.DO_NOTHING,
         session: Optional[ClientSession] = None,
         skip_actions: Optional[List[Union[ActionDirections, str]]] = None,
-    ) -> DocType:
+    ) -> Self:
         """
         Insert the document (self) to the collection
         :return: Document
@@ -351,9 +351,9 @@ class Document(
         return self
 
     def create(
-        self: DocType,
+        self: Self,
         session: Optional[ClientSession] = None,
-    ) -> DocType:
+    ) -> Self:
         """
         The same as self.insert()
         :return: Document
@@ -436,13 +436,13 @@ class Document(
     @save_state_after
     @validate_self_before
     def replace(
-        self: DocType,
+        self: Self,
         ignore_revision: bool = False,
         session: Optional[ClientSession] = None,
         bulk_writer: Optional[BulkWriter] = None,
         link_rule: WriteRules = WriteRules.DO_NOTHING,
         skip_actions: Optional[List[Union[ActionDirections, str]]] = None,
-    ) -> DocType:
+    ) -> Self:
         """
         Fully update the document in the database
 
@@ -515,12 +515,12 @@ class Document(
     @save_state_after
     @validate_self_before
     def save(
-        self: DocType,
+        self: Self,
         session: Optional[ClientSession] = None,
         link_rule: WriteRules = WriteRules.DO_NOTHING,
         ignore_revision: bool = False,
         **kwargs,
-    ) -> None:
+    ) -> Self:
         """
         Update an existing model in the database or
         insert it if it does not yet exist.
@@ -590,7 +590,7 @@ class Document(
     @wrap_with_actions(EventTypes.SAVE_CHANGES)
     @validate_self_before
     def save_changes(
-        self,
+        self: Self,
         ignore_revision: bool = False,
         session: Optional[ClientSession] = None,
         bulk_writer: Optional[BulkWriter] = None,
@@ -648,7 +648,7 @@ class Document(
     @wrap_with_actions(EventTypes.UPDATE)
     @save_state_after
     def update(
-        self,
+        self: Self,
         *args,
         ignore_revision: bool = False,
         session: Optional[ClientSession] = None,
@@ -656,7 +656,7 @@ class Document(
         skip_actions: Optional[List[Union[ActionDirections, str]]] = None,
         skip_sync: Optional[bool] = None,
         **pymongo_kwargs,
-    ) -> DocType:  # type: ignore
+    ) -> Self:  # type: ignore
         """
         Partially update the document in the database
 
@@ -728,7 +728,7 @@ class Document(
         )
 
     def set(
-        self,
+        self: Self,
         expression: Dict[Union[ExpressionField, str], Any],
         session: Optional[ClientSession] = None,
         bulk_writer: Optional[BulkWriter] = None,
@@ -767,7 +767,7 @@ class Document(
         )
 
     def current_date(
-        self,
+        self: Self,
         expression: Dict[Union[ExpressionField, str], Any],
         session: Optional[ClientSession] = None,
         bulk_writer: Optional[BulkWriter] = None,
@@ -794,7 +794,7 @@ class Document(
         )
 
     def inc(
-        self,
+        self: Self,
         expression: Dict[Union[ExpressionField, str], Any],
         session: Optional[ClientSession] = None,
         bulk_writer: Optional[BulkWriter] = None,
